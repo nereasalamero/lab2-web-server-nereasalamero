@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Oops! Something Went Wrong</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #e6f2ea; /* soft green background */
+                color: #2e3d2f;
+                text-align: center;
+                padding: 60px 20px;
+            }
+
+            .error-box {
+                background-color: #d0e8d0; /* light green box */
+                border: 2px solid #91f5ad;
+                padding: 40px;
+                border-radius: 15px;
+                display: inline-block;
+                max-width: 450px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            }
+
+            .error-box h1 {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+
+            .error-box h2 {
+                font-size: 1.5em;
+                color: #3d6b3d;
+                margin: 10px 0;
+            }
+
+            .error-box p {
+                font-size: 1.1em;
+                margin: 8px 0;
+            }
+
+            .error-box a {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 12px 25px;
+                background-color: #3d6b3d;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 12px;
+                font-weight: bold;
+                transition: background 0.3s, transform 0.3s;
+            }
+
+            .error-box a:hover {
+                background-color: #2e4f2e;
+                transform: scale(1.05);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-box">
+            <h1>Oops! Something went wrong.</h1>
+            <h2 th:text="${status}"></h2>
+            <p th:text="${error}"></p>
+            <p th:text="${message}"></p>
+        </div>
+    </body>
+</html>
