@@ -1,4 +1,4 @@
-package es.unizar.webeng.lab2.IntegrationTest
+package es.unizar.webeng.lab2
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
