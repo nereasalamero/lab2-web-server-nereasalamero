@@ -41,12 +41,17 @@ Enablement of HTTP/2 and configuration of SSL using a self-signed certificate. S
 
 ## AI Disclosure
 ### AI Tools Used
-- [List specific AI tools used]
+- ChatGPT
+- Grammarly
 
 ### AI-Assisted Work
 - [Describe what was generated with AI assistance]
 - [Percentage of AI-assisted vs. original work]
 - [Any modifications made to AI-generated code]
+
+- Order the features in order of difficulty
+- Explain GitHub Actions errors.
+- Correction of Redaction
 
 ### Original Work
 - [Describe work done without AI assistance]

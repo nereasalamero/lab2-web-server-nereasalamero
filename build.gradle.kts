@@ -23,6 +23,9 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+    testImplementation("org.apache.httpcomponents.core5:httpcore5:5.2.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<Test> {

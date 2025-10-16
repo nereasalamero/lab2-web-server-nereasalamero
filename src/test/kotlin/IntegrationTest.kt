@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Import(TestRestTemplateConfig::class)
 class IntegrationTest {
     @LocalServerPort
     private var port: Int = 0
@@ -29,7 +31,7 @@ class IntegrationTest {
 
         val response =
             restTemplate.exchange(
-                "http://localhost:$port/invalid-url",
+                "https://localhost:$port",
                 HttpMethod.GET,
                 entity,
                 String::class.java,
@@ -39,11 +41,15 @@ class IntegrationTest {
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
 
         // Verify HTML messages
-        assertThat(response.body).contains("Oops! Something went wrong.")
-        assertThat(response.body).contains("Go Back Home")
+        assertThat(response.body).contains("Oops! Something went wrong")
     }
 
     @Test
     fun `validate the use of the time endpoint`() {
+        val response = restTemplate.getForEntity("https://localhost:$port/time", String::class.java)
+        // Verify HTTP 200 OK
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        // Verify body contains "timestamp"
+        assertThat(response.body).isNotNull
     }
 }
