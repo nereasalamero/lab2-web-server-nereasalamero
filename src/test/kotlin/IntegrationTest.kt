@@ -27,12 +27,13 @@ class IntegrationTest {
         headers.accept = listOf(MediaType.TEXT_HTML)
         val entity = HttpEntity<String>(headers)
 
-        val response = restTemplate.exchange(
-            "http://localhost:$port/invalid-url",
-            HttpMethod.GET,
-            entity,
-            String::class.java
-        )
+        val response =
+            restTemplate.exchange(
+                "http://localhost:$port/invalid-url",
+                HttpMethod.GET,
+                entity,
+                String::class.java,
+            )
 
         // Verify status code
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
@@ -43,7 +44,6 @@ class IntegrationTest {
     }
 
     @Test
-    fun `validate the use of the time endpoint`(){
-
+    fun `validate the use of the time endpoint`() {
     }
 }
