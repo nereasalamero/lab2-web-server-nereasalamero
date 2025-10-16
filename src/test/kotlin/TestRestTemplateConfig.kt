@@ -2,7 +2,6 @@ package es.unizar.webeng.lab2
 
 import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager
-import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory
 import org.apache.hc.core5.http.config.RegistryBuilder
@@ -48,7 +47,6 @@ class TestRestTemplateConfig {
 
         // SSL socket factory con hostname verifier que ignora hostname
         val sslSocketFactory = SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE)
-
 
         val socketFactoryRegistry =
             RegistryBuilder
