@@ -17,21 +17,24 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
+// Create
 @TestConfiguration
 class TestRestTemplateConfig {
     @Bean
     fun testRestTemplate(): TestRestTemplate {
         // Accept every certificate (TrustAll)
-        val trustAllCerts =
+        val trustAll =
             arrayOf<TrustManager>(
                 object : X509TrustManager {
                     override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
 
+                    // Don't check client certificates
                     override fun checkClientTrusted(
                         chain: Array<X509Certificate>,
                         authType: String,
                     ) {}
 
+                    // Don't check server certificates
                     override fun checkServerTrusted(
                         chain: Array<X509Certificate>,
                         authType: String,
@@ -39,35 +42,37 @@ class TestRestTemplateConfig {
                 },
             )
 
-        // SSLContext with TLS
+        // Create a SSLContext with TLS protocol
         val sslContext =
             SSLContext.getInstance("TLS").apply {
-                init(null, trustAllCerts, SecureRandom())
+                init(null, trustAll, SecureRandom())
             }
 
-        // SSL socket factory con hostname verifier que ignora hostname
+        // SSL socket factory that doesn't verify hostnames
         val sslSocketFactory = SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE)
 
-        val socketFactoryRegistry =
+        // Register the SSL socket factory for HTTPS connection
+        val sslSocketFactoryRegistry =
             RegistryBuilder
                 .create<org.apache.hc.client5.http.socket.ConnectionSocketFactory>()
                 .register("https", sslSocketFactory)
                 .build()
 
         // Connection manager
-        val cm = PoolingHttpClientConnectionManager(socketFactoryRegistry)
+        val cm = PoolingHttpClientConnectionManager(sslSocketFactoryRegistry)
 
-        //  Client with connection manager
+        //  Create a custom client using connection manager
         val client =
             HttpClients
                 .custom()
                 .setConnectionManager(cm)
                 .build()
 
-        val factory = HttpComponentsClientHttpRequestFactory(client)
+        // HTTP Request factory that creates HTTP requests using the custom client.
+        val fact = HttpComponentsClientHttpRequestFactory(client)
 
-        // Se pasa el RestTemplateBuilder al constructor de TestRestTemplate
-        val builder = RestTemplateBuilder().requestFactory(Supplier { factory })
+        // Build and return a TestRestTemplate
+        val builder = RestTemplateBuilder().requestFactory(Supplier { fact })
         return TestRestTemplate(builder)
     }
 }

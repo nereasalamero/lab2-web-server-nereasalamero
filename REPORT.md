@@ -1,7 +1,6 @@
 # Lab 2 Web Server -- Project Report
 
 ## Description of Changes
-[Detailed description of all changes made]
 ### Exercise 1. Customise the Whitelabel Error Page
 When Spring Boot application encounters an error, it displays a customised error page in order to enhance user 
 experience. In order to do it, these were the followed steps:
@@ -19,40 +18,48 @@ Creation of a new REST endpoint that returns the current server time in a struct
 6. Create a REST Controller
 7. Add a test that validates the use of the time endpoint
 
+
 ### Exercise 3. Enable HTTP/2 and SSL Support
 Enablement of HTTP/2 and configuration of SSL using a self-signed certificate. Steps followed:
 1. Generate a Self-Signed Certificate
 2. Create a PKCS12 Keystore
 3. Configure Spring Boot for SSL and HTTP/2
 
-### Extra features
-#### Add Replace error.html with @ControllerAdvice
-- **Description:** Replace the static page with a global exception handler returning RFC 7807 `ProblemDetail` (or equivalent), mapping at least one custom domain exception with meaningful fields and localization via `MessageSource`. Handle `NoHandlerFoundException` and validation errors with distinct problem types; include `type` as a resolvable URI and `instance` as the request path.
-- **JUnit Test:** Verify status codes and JSON body shape for different exceptions; include a test that ensures a correlation/trace id is included (header and response) and localized `detail` based on `Accept-Language`. Assert `404` for unknown paths uses your problem format and that content negotiation returns XML when requested.
-- **Goal:** Achieve more flexible and centralized error handling.
-- **Benefit:** Enhances maintainability and provides a consistent error response structure.
-
+### Adjusting Tests to HTTP/2 and SSL Implementations
+After configuring HTTP/2 and SSL, the tests I wrote for exercises one and two stopped working. It took me a while to 
+realise why this was happening, but thanks to the help of AI (ChatGPT in this case) I was able to understand what the 
+problem was. <br>
+What happened was that my tests were failing with the status code `400 BAD_REQUEST` instead of the expected 
+`404 NOT_FOUND` and `200 OK`. This was because the server rejected the connection because it didn't trust the self-signed
+certificate after receiving the request. <br>
+Some try-error tests later, I finally asked the teacher for some help, as well as some of my classmates who had the
+same problem as me. In the end, I was able to fix it by using the `TestRestTemplateConfig.kt`, where I set the server to
+trust all certificates, allowing the tests to run successfully.
 
 ## Technical Decisions
-[Explanation of technical choices made]
+- **Code Organisation**: All definitions of exercise two were made on the same file in order to improve simplicity and readability. 
+- **Testing configuration**: `TestRestTemplateConfig.kt` was used to handle SSL trust during testing instead of disabling SSL validation.
 
 ## Learning Outcomes
-[What you learned from this assignment]
+This section includes the things I have learned from this assignment.<br>
+- Some features may sound easy, but in reality they are the most tricky ones.
+- How to create REST endpoints, configure and use SSL certificate, and enable HTTP/2. 
+- GitHub Actions are really handy when it comes to automatisation of builds and running tests.
+- Having a clean code structure is really important, as well as coding proper testing and configuration management.
 
 ## AI Disclosure
 ### AI Tools Used
-- ChatGPT
-- Grammarly
+- ChatGPT: provided explanations, debugging help, and assistance with refactoring code and report writing
+- Grammarly: grammar corrections and improving the clarity of the report.
 
 ### AI-Assisted Work
-- [Describe what was generated with AI assistance]
-- [Percentage of AI-assisted vs. original work]
-- [Any modifications made to AI-generated code]
-
-- Order the features in order of difficulty
-- Explain GitHub Actions errors.
-- Correction of Redaction
+- Rewrite some of the explanations, in order to increase its clarity.
+- Bug fixing.
+- Helped interpret GitHub Actions errors and suggested some fixes.
+- All AI-generated code was reviewed and modified.
 
 ### Original Work
-- [Describe work done without AI assistance]
-- [Your understanding and learning process]
+- Base code was provided by the teacher.
+- AI was used as an assistant to improve the quality of the code, clarify some doubts and explain some errors  (mentioned in the previous section).
+- Additional coding tips were researched through Internet, although most of them weren't worth it.
+- Created and tested the /time endpoint.
